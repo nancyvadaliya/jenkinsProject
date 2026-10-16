@@ -6,10 +6,10 @@ pipeline {
         timestamps()
     }
 
-   environment {
-    AWS_REGION = 'ap-northeast-3'
-    SECRET_ID  = 'jenkinsLearning/cred'
-}
+    environment {
+        AWS_REGION = 'ap-northeast-3'
+        SECRET_ID  = 'jenkinsLearning/cred'
+    }
 
     stages {
         stage('Checkout') {
@@ -53,7 +53,11 @@ pipeline {
             steps {
                 sh '''
                     set -eu
-                    docker build -t "$IMAGE_NAME:$IMAGE_TAG" .
+
+                    docker build \
+                      -t "$IMAGE_NAME:$IMAGE_TAG" \
+                      -f tourism-website/Dockerfile \
+                      tourism-website
                 '''
             }
         }
@@ -96,6 +100,7 @@ pipeline {
             steps {
                 sh '''
                     set -eu
+
                     docker rm -f tourism-staging 2>/dev/null || true
 
                     docker run -d \
@@ -112,6 +117,7 @@ pipeline {
             steps {
                 sh '''
                     set -eu
+
                     curl --retry 5 --retry-delay 2 --retry-connrefused \
                       --fail http://localhost:8081/
                 '''
@@ -132,6 +138,7 @@ pipeline {
             steps {
                 sh '''
                     set -eu
+
                     docker rm -f tourism-production 2>/dev/null || true
 
                     docker run -d \
