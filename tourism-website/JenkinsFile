@@ -6,10 +6,10 @@ pipeline {
         timestamps()
     }
 
-    environment {
-        AWS_REGION = 'ap-south-1'
-        SECRET_ID  = 'tourism/dockerhub'
-    }
+   environment {
+    AWS_REGION = 'ap-northeast-3'
+    SECRET_ID  = 'jenkinsLearning/cred'
+}
 
     stages {
         stage('Checkout') {
